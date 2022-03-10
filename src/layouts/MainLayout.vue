@@ -1,107 +1,134 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="lHr lpR lFr">
+
+    <q-header class="bg-primary text-white">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-toolbar-title class="text-weight-bold">
+          <div class="absolute-center">
+            <q-icon
+              class="q-pa-sm"
+              name="fas fa-home"
+              size="sm"
+              color="blue-grey-10"
+            />
+            <span class="gt-md">Главная</span>
+          </div>
+        </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-space></q-space>
+
+        <q-btn flat rounded push icon="fas fa-plus"/>
+
+        <q-btn-dropdown flat rounded push>
+          <template v-slot:label>
+            <div class="row items-center no-wrap">
+              <q-avatar size="42px">
+                <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+              </q-avatar>
+            </div>
+          </template>
+          <q-list>
+            <q-item clickable v-close-popup @click="onItemClick">
+              <q-item-section>
+                <q-item-label>Профиль</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-separator color="black" inset/>
+            <q-item clickable v-close-popup @click="onItemClick">
+              <q-item-section>
+                <q-item-label>Выйти</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+      <div class="q-ma-md">
+        <q-icon
+          class="q-pa-sm icon-center"
+          name="fab fa-codepen"
+          size="lg"
+          color="black"
         />
+      </div>
+      <q-list class="q-pa-md q-mt-xl">
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="primary" name="fas fa-home"/>
+          </q-item-section>
+          <q-item-section class="text-weight-medium text-subtitle1">Главная</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="primary" name="fas fa-stream"/>
+          </q-item-section>
+          <q-item-section class="text-weight-medium text-subtitle1">Обзор</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="primary" name="fas fa-star"/>
+          </q-item-section>
+          <q-item-section class="text-weight-medium text-subtitle1">Избранное</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon color="primary" name="fas fa-archive"/>
+          </q-item-section>
+          <q-item-section class="text-weight-medium text-subtitle1">Архив</q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
+    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
+
+      <div class="q-pa-md">
+        <span class="text-weight-bold text-h6">Новое</span>
+          <!-- todo Список новых статей по тегу-->
+      </div>
+    </q-drawer>
+
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
+
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from "components/EssentialLink.vue";
+import {ref} from 'vue'
 
-const linksList = [
-  {
-    title: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
-  },
-  {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
-  },
-  {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
-  },
-  {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
-  },
-  {
-    title: "Twitter",
-    caption: "@quasarframework",
-    icon: "rss_feed",
-    link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
-
-import { defineComponent, ref } from "vue";
-
-export default defineComponent({
-  name: "MainLayout",
-
-  components: {
-    EssentialLink,
-  },
-
+export default {
   setup() {
-    const leftDrawerOpen = ref(false);
+    const leftDrawerOpen = ref(false)
+    const rightDrawerOpen = ref(false)
 
     return {
-      essentialLinks: linksList,
+      btn_toggle: ref('one'),
       leftDrawerOpen,
       toggleLeftDrawer() {
-        leftDrawerOpen.value = !leftDrawerOpen.value;
+        leftDrawerOpen.value = !leftDrawerOpen.value
       },
-    };
-  },
-});
+
+      rightDrawerOpen,
+      toggleRightDrawer() {
+        rightDrawerOpen.value = !rightDrawerOpen.value
+      }
+    }
+  }
+}
 </script>
+
+<style lang="sass">
+.icon-center
+  position: absolute
+  top: 0
+  left: 50%
+  transform: translateX(-50%)
+
+.my-custom-toggle
+  border: 1px solid #027be3
+</style>
