@@ -8,12 +8,13 @@
         <q-toolbar-title class="text-weight-bold">
           <div class="absolute-center">
             <q-icon
+              id="icon1"
+              :name="this.$route.meta.icon"
               class="q-pa-sm"
-              name="fas fa-home"
               size="sm"
               color="blue-grey-10"
             />
-            <span class="gt-md">Главная</span>
+            <span class="gt-md">{{ $route.name }}</span>
           </div>
         </q-toolbar-title>
 
@@ -56,25 +57,31 @@
         />
       </div>
       <q-list class="q-pa-md q-mt-xl">
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple exact to="/">
           <q-item-section avatar>
             <q-icon color="primary" name="fas fa-home"/>
           </q-item-section>
           <q-item-section class="text-weight-medium text-subtitle1">Главная</q-item-section>
         </q-item>
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple exact to="/overview">
           <q-item-section avatar>
             <q-icon color="primary" name="fas fa-stream"/>
           </q-item-section>
           <q-item-section class="text-weight-medium text-subtitle1">Обзор</q-item-section>
         </q-item>
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple exact to="/profile">
+          <q-item-section avatar>
+            <q-icon color="primary" name="fas fa-user-circle"/>
+          </q-item-section>
+          <q-item-section class="text-weight-medium text-subtitle1">Профиль</q-item-section>
+        </q-item>
+        <q-item clickable v-ripple exact to="/favourite">
           <q-item-section avatar>
             <q-icon color="primary" name="fas fa-star"/>
           </q-item-section>
           <q-item-section class="text-weight-medium text-subtitle1">Избранное</q-item-section>
         </q-item>
-        <q-item clickable v-ripple>
+        <q-item clickable v-ripple exact to="/archive">
           <q-item-section avatar>
             <q-icon color="primary" name="fas fa-archive"/>
           </q-item-section>
