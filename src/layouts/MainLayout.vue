@@ -87,7 +87,62 @@
 
       <div class="q-pa-md">
         <span class="text-weight-bold text-h6">Новое</span>
-          <!-- todo Список новых статей по тегу-->
+        <div style="min-width: 250px; max-width: 300px">
+          <q-select
+            @add="selectAddTag"
+            @remove="selectRemoveTag"
+            filled
+            v-model="modelMultiple"
+            multiple
+            :options="options"
+            use-chips
+            stack-label
+            label="Multiple selection"/>
+        </div>
+<!--todo связь с бд для вывода первых ~5 записей по тегу-->
+        <div class="q-pa-md" style="max-width: 350px">
+          <q-list>
+            <q-item>
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section side top>
+                <q-item-label caption>2 min ago</q-item-label>
+                <q-badge class="q-mt-sm" color="teal" label="10k" />
+              </q-item-section>
+            </q-item>
+
+            <q-separator spaced inset />
+
+            <q-item>
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section side top>
+                <q-item-label caption>2 min ago</q-item-label>
+                <q-badge class="q-mt-sm" color="teal" label="10k" />
+              </q-item-section>
+            </q-item>
+
+            <q-separator spaced inset />
+
+            <q-item>
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section side top>
+                <q-item-label caption>2 min ago</q-item-label>
+                <q-badge class="q-mt-sm" color="teal" label="10k" />
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
       </div>
     </q-drawer>
 
@@ -108,6 +163,11 @@ export default {
 
     return {
       btn_toggle: ref('one'),
+      modelMultiple: ref(),
+
+      options: [
+        'Tag #1', 'Tag #2', 'Tag #3'
+      ],
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
@@ -117,6 +177,14 @@ export default {
       toggleRightDrawer() {
         rightDrawerOpen.value = !rightDrawerOpen.value
       }
+    }
+  },
+  methods: {
+    selectAddTag(tag){
+      console.log("added #" + tag.index + ": " + tag.value)
+    },
+    selectRemoveTag(tag){
+      console.log("removed #" + tag.index + ": " + tag.value)
     }
   }
 }
