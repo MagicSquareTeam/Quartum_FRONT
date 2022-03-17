@@ -178,11 +178,6 @@ export default {
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-
-      rightDrawerOpen,
-      toggleRightDrawer() {
-        rightDrawerOpen.value = !rightDrawerOpen.value
       }
     }
   },
