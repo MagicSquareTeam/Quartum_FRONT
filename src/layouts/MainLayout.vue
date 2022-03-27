@@ -47,7 +47,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered :width="250">
       <div class="q-ma-md">
         <q-icon
           class="q-pa-sm icon-center"
@@ -90,8 +90,7 @@
       </q-list>
     </q-drawer>
 
-    <q-drawer show-if-above side="right" bordered>
-
+    <q-drawer show-if-above side="right" bordered :width="280">
       <div class="q-pa-md">
         <span class="text-weight-bold text-h6">Новое</span>
         <div style="min-width: 250px; max-width: 300px">
