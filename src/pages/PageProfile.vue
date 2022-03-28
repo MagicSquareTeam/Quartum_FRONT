@@ -1,13 +1,14 @@
 <template>
   <q-page>
+    <!--todo add edit profile image-->
     <div class="row q-col-gutter-sm q-ma-xs">
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <q-card class="my-card" flat bordered>
           <q-card-section horizontal class="flex">
             <q-card-section class="q-pt-xs">
-              <div class="text-h5 q-mt-sm q-mb-xs">Mayank Patel</div>
+              <div class="text-h5 q-mt-sm q-mb-xs">{{ user.surname }} {{ user.name }} {{ user.patronymic }}</div>
               <div class="text-caption text-grey">
-                Profile status
+                {{ user.status }}
               </div>
             </q-card-section>
 
@@ -28,10 +29,41 @@
             <q-form
               class="q-gutter-md"
             >
+              <!--todo add password and hide creds-->
               <q-input
                 filled
-                v-model="user.first_name"
-                label="Name"
+                v-model="editedUser.name"
+                label="Имя"
+                :readonly="!isProfileEditing"
+              />
+              <q-input
+                filled
+                v-model="editedUser.surname"
+                label="Фамилия"
+                :readonly="!isProfileEditing"
+              />
+              <q-input
+                filled
+                v-model="editedUser.patronymic"
+                label="Отчество"
+                :readonly="!isProfileEditing"
+              />
+              <q-input
+                filled
+                v-model="editedUser.status"
+                label="Статус"
+                :readonly="!isProfileEditing"
+              />
+              <q-input
+                filled
+                v-model="editedUser.birthday"
+                label="День рождения"
+                :readonly="!isProfileEditing"
+              />
+              <q-input
+                filled
+                v-model="editedUser.phoneNumber"
+                label="Номер телефона"
                 :readonly="!isProfileEditing"
               />
 
@@ -189,7 +221,8 @@
                     <q-tooltip class="orange-4"><span v-if="!article.archived">Архивировать</span><span
                       v-if="article.archived">Разархивировать</span></q-tooltip>
                   </q-btn>
-                  <q-btn size="13px" flat round color="primary" icon="fas fa-ban" @click="openConfirmDeleteArticleDialog(article.id)">
+                  <q-btn size="13px" flat round color="primary" icon="fas fa-ban"
+                         @click="openConfirmDeleteArticleDialog(article.id)">
                     <q-tooltip class="orange-4">Удалить</q-tooltip>
                   </q-btn>
                 </q-item-section>
@@ -203,7 +236,8 @@
         <q-dialog v-model="confirmArchiveArticleDialog" persistent>
           <q-card>
             <q-card-section class="row items-center">
-              <q-avatar :icon="this.archiveArticle.archived ? 'fas fa-folder-minus' : 'fas fa-folder-plus'" color="primary" text-color="white"/>
+              <q-avatar :icon="this.archiveArticle.archived ? 'fas fa-folder-minus' : 'fas fa-folder-plus'"
+                        color="primary" text-color="white"/>
               <span
                 class="q-ml-sm">Вы действительно хотите <span v-if="this.archiveArticle.archived">раз</span>архивировать статью {{
                   this.archiveArticle.name
@@ -294,6 +328,16 @@ export default {
         archived: false
       },
     ]
+    var user = {
+      name: 'Имя',
+      surname: 'Фамилия',
+      patronymic: "Отчество",
+      birthday: '19.05.2000',
+      status: 'Верни шаверму',
+      photo: "",
+      phoneNumber: "88005553535"
+    }
+    var editedUser = Object.create(user)
 
     return {
       isProfileEditing: false,
@@ -319,13 +363,7 @@ export default {
       },
       searchUser: "",
       searchArticle: "",
-      user: {
-        first_name: 'Mayank',
-        last_name: 'Patel',
-        age: 30,
-        email: 'm******@****.com',
-        phone: '98******23'
-      },
+      user, editedUser
     }
   },
   methods: {
@@ -335,11 +373,13 @@ export default {
     },
     cancelEditProfileDataBtn() {
       console.log("Cancel edit profile data")
-      this.isProfileEditing = false;
+      this.isProfileEditing = false
+      this.editedUser = Object.create(this.user)
     },
     saveProfileDataBtn() {
       console.log("Save profile data")
       this.isProfileEditing = false;
+      this.user = Object.create(this.editedUser)
     },
     deleteUserFromSubs(id) {
       for (let i = 0; i < this.subusers.length; i++) {
