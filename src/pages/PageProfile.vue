@@ -3,11 +3,11 @@
     <!--todo add edit profile image-->
     <div class="row q-col-gutter-sm q-ma-xs">
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <q-card class="my-card" flat bordered>
+        <q-card flat bordered>
           <q-card-section horizontal class="flex">
-            <q-card-section class="q-pt-xs">
+            <q-card-section class="q-pt-xs col-7">
               <div class="text-h5 q-mt-sm q-mb-xs">{{ user.surname }} {{ user.name }} {{ user.patronymic }}</div>
-              <div class="text-caption text-grey">
+              <div class="text-caption text-grey" style="white-space: normal">
                 {{ user.status }}
               </div>
             </q-card-section>
@@ -20,7 +20,112 @@
               />
             </q-card-section>
           </q-card-section>
-
+          <q-separator/>
+          <q-card-section>
+            {{ user.about }}
+          </q-card-section>
+          <q-separator></q-separator>
+          <q-form
+            class="q-gutter-md q-ma-sm"
+            @submit="submitChangeSec"
+          >
+            <!--todo проверка на существующие логины и пароли-->
+            <q-input
+              filled
+              v-model="editedUser.username"
+              label="Логин"
+              :readonly="!isProfileSecEditing"
+              lazy-rules
+              :rules="[val => val && val.length > 5 || 'Длина логина должна быть более 5 символов']"
+            />
+            <q-input
+              filled
+              v-model="editedUser.email"
+              label="Почта"
+              :readonly="!isProfileSecEditing"
+              type="email"
+              lazy-rules
+              :rules="[val => /(.+)@(.+){2,}\.(.+){2,}/.test(val) || 'Введите корректную почту']"
+            />
+            <div class="flex">
+              <div style="flex-grow: 1"></div>
+              <q-btn :disable="isProfileSecEditing" v-if="!isProfileSecEditing" flat color="primary" label="Изменить"
+                     no-caps @click="isProfileSecEditing = true"/>
+              <q-btn :disable="!isProfileSecEditing" v-if="isProfileSecEditing" flat color="primary" label="Отменить"
+                     no-caps @click="resetEditSecDataBtn"/>
+              <q-btn :disable="!isProfileSecEditing" v-if="isProfileSecEditing" flat color="primary" label="Сохранить" type="submit"
+                     no-caps/>
+            </div>
+          </q-form>
+          <q-form
+            class="q-gutter-md q-ma-sm"
+            @submit="submitChangePassword"
+          >
+            <q-input
+              filled
+              v-model="editedUser.password"
+              label="Пароль"
+              readonly
+              type="password"
+              v-if="!this.isPasswordEditing"
+            />
+            <q-input
+              filled
+              v-model="editedUser.oldPassword"
+              label="Введите старый пароль"
+              :readonly="!isPasswordEditing"
+              :type="isPwd1 ? 'password' : 'text'"
+              v-if="this.isPasswordEditing"
+              lazy-rules
+              :rules="[val => val === editedUser.password || 'Пароли не совпадают']"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd1 ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd1 = !isPwd1"
+                />
+              </template>
+            </q-input>
+            <!--todo добавить метод проверки паролей через regexp-->
+            <q-input
+              filled
+              v-model="editedUser.newPassword"
+              label="Введите новый пароль"
+              :readonly="!isPasswordEditing"
+              type="password"
+              v-if="this.isPasswordEditing"
+              :rules="[val => val && val.length > 5 || 'Пароль должен быть более 5 символов']"
+            />
+            <q-input
+              filled
+              v-model="editedUser.confirmPassword"
+              label="Подтвердите новый пароль"
+              :readonly="!isPasswordEditing"
+              :type="isPwd2 ? 'password' : 'text'"
+              v-if="this.isPasswordEditing"
+              lazy-rules
+              :rules="[val => val === editedUser.newPassword || 'Пароль не совпадает']"
+            >
+              <template v-slot:append>
+                <q-icon
+                  :name="isPwd2 ? 'visibility_off' : 'visibility'"
+                  class="cursor-pointer"
+                  @click="isPwd2 = !isPwd2"
+                />
+              </template>
+            </q-input>
+            <div class="flex">
+              <div style="flex-grow: 1"></div>
+              <q-btn :disable="isPasswordEditing" v-if="!isPasswordEditing" flat color="primary" label="Изменить"
+                     no-caps @click="this.isPasswordEditing = true"/>
+              <q-btn :disable="!isPasswordEditing" v-if="isPasswordEditing" flat color="primary" label="Отменить"
+                     no-caps @click="resetChangePassword"/>
+              <q-btn :disable="!isPasswordEditing" v-if="isPasswordEditing" flat color="primary" label="Сохранить"
+                     type="submit"
+                     no-caps/>
+            </div>
+          </q-form>
         </q-card>
       </div>
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -28,53 +133,79 @@
           <q-card-section>
             <q-form
               class="q-gutter-md"
+              @submit="submitChangeUserData"
             >
-              <!--todo add password and hide creds-->
               <q-input
                 filled
                 v-model="editedUser.name"
                 label="Имя"
-                :readonly="!isProfileEditing"
+                :readonly="!isProfileInfoEditing"
+                lazy-rules
+                :rules="[val => val && /^[a-zA-Zа-яА-Я ]+$/.test(val) || 'Проверьте корректность']"
               />
               <q-input
                 filled
                 v-model="editedUser.surname"
                 label="Фамилия"
-                :readonly="!isProfileEditing"
+                :readonly="!isProfileInfoEditing"
+                lazy-rules
+                :rules="[val => val && /^[a-zA-Zа-яА-Я ]+$/.test(val) || 'Проверьте корректность']"
               />
               <q-input
                 filled
                 v-model="editedUser.patronymic"
                 label="Отчество"
-                :readonly="!isProfileEditing"
+                :readonly="!isProfileInfoEditing"
+                lazy-rules
+                :rules="[val => val && /^[a-zA-Zа-яА-Я ]+$/.test(val) || 'Проверьте корректность']"
               />
               <q-input
                 filled
                 v-model="editedUser.status"
                 label="Статус"
-                :readonly="!isProfileEditing"
+                :readonly="!isProfileInfoEditing"
+                autogrow
+                maxlength="300"
+                counter
+              />
+              <q-input
+                filled
+                v-model="editedUser.about"
+                label="Обо мне"
+                :readonly="!isProfileInfoEditing"
+                autogrow
+                maxlength="1000"
+                counter
               />
               <q-input
                 filled
                 v-model="editedUser.birthday"
                 label="День рождения"
-                :readonly="!isProfileEditing"
+                :readonly="!isProfileInfoEditing"
+                type="date"
               />
               <q-input
                 filled
                 v-model="editedUser.phoneNumber"
                 label="Номер телефона"
-                :readonly="!isProfileEditing"
+                :readonly="!isProfileInfoEditing"
+                mask="+# - (###) - ### - ## - ##"
+                lazy-rules
+                :rules="[val => (val && val.length === '+# - (###) - ### - ## - ##'.length || (!val)) || 'Проверьте корректность']"
+                type="tel"
               />
 
               <div class="flex">
                 <div style="flex-grow: 1"></div>
-                <q-btn :disable="isProfileEditing" v-if="!isProfileEditing" flat color="primary" label="Изменить"
-                       no-caps @click="editProfileData"/>
-                <q-btn :disable="!isProfileEditing" v-if="isProfileEditing" flat color="primary" label="Отменить"
-                       no-caps @click="cancelEditProfileDataBtn"/>
-                <q-btn :disable="!isProfileEditing" v-if="isProfileEditing" flat color="primary" label="Сохранить"
-                       no-caps @click="saveProfileDataBtn"/>
+                <q-btn :disable="isProfileInfoEditing" v-if="!isProfileInfoEditing" flat color="primary"
+                       label="Изменить"
+                       no-caps @click="isProfileInfoEditing = true"/>
+                <q-btn :disable="!isProfileInfoEditing" v-if="isProfileInfoEditing" flat color="primary"
+                       label="Отменить"
+                       no-caps @click="resetChangeUserData"/>
+                <q-btn :disable="!isProfileInfoEditing" v-if="isProfileInfoEditing" flat color="primary" type="submit"
+                       label="Сохранить"
+                       no-caps/>
               </div>
             </q-form>
           </q-card-section>
@@ -107,7 +238,7 @@
           <q-separator></q-separator>
 
           <q-card-section>
-            <q-input square filled v-model="searchUser" class="q-pa-sm">
+            <q-input square clearable filled v-model="searchUser" class="q-pa-sm" @clear="this.searchUser = ''">
               <template v-slot:prepend>
                 <q-icon name="fas fa-search"/>
               </template>
@@ -177,7 +308,8 @@
             <q-item-label class="text-h6 text-weight-bold text-center">Ваши статьи</q-item-label>
           </q-card-section>
           <q-card-section horizontal class="flex q-pa-sm q-pl-md">
-            <q-input square filled v-model="searchArticle" class="col-3" style="flex-grow: 1">
+            <q-input square clearable filled v-model="searchArticle" class="col-3" style="flex-grow: 1"
+                     @clear="this.searchArticle = ''">
               <template v-slot:prepend>
                 <q-icon name="fas fa-search"/>
               </template>
@@ -275,6 +407,7 @@
 </template>
 
 <script>
+import {Notify} from 'quasar'
 import {ref} from 'vue'
 
 export default {
@@ -332,7 +465,14 @@ export default {
       name: 'Имя',
       surname: 'Фамилия',
       patronymic: "Отчество",
-      birthday: '19.05.2000',
+      username: "Username1",
+      password: "MyPASSword",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+      email: "email@luga.ru",
+      birthday: '2000-05-19',
+      about: "Все обо мне",
       status: 'Верни шаверму',
       photo: "",
       phoneNumber: "88005553535"
@@ -340,8 +480,11 @@ export default {
     var editedUser = Object.create(user)
 
     return {
-      isProfileEditing: false,
+      isProfileInfoEditing: false,
+      isProfileSecEditing: false,
+      isPasswordEditing: false,
       showArchived: false,
+      isPwd1: true, isPwd2: true,
       alltags, subtags, subusers, articles,
       editTagDialog: ref(false),
       confirmArchiveArticleDialog: ref(false),
@@ -367,20 +510,6 @@ export default {
     }
   },
   methods: {
-    editProfileData() {
-      console.log("Edit profile data")
-      this.isProfileEditing = true;
-    },
-    cancelEditProfileDataBtn() {
-      console.log("Cancel edit profile data")
-      this.isProfileEditing = false
-      this.editedUser = Object.create(this.user)
-    },
-    saveProfileDataBtn() {
-      console.log("Save profile data")
-      this.isProfileEditing = false;
-      this.user = Object.create(this.editedUser)
-    },
     deleteUserFromSubs(id) {
       for (let i = 0; i < this.subusers.length; i++) {
         if (this.subusers[i].id === id) {
@@ -411,6 +540,67 @@ export default {
       this.deleteArticle.id = -1
       this.deleteArticle.name = null
     },
+    submitChangePassword() {
+      this.user.password = this.editedUser.confirmPassword
+      Notify.create({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'fas fa-save',
+        message: 'Пароль успешно изменен'
+      })
+      this.resetChangePassword()
+    },
+    submitChangeSec() {
+      this.user.email = this.editedUser.email
+      this.user.username = this.editedUser.username
+      Notify.create({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'fas fa-save',
+        message: 'Данные успешно изменены'
+      })
+      this.resetEditSecDataBtn()
+    },
+    submitChangeUserData() {
+      this.user.name = this.editedUser.name
+      this.user.surname = this.editedUser.surname
+      this.user.patronymic = this.editedUser.patronymic
+      this.user.status = this.editedUser.status
+      this.user.about = this.editedUser.about
+      this.user.birthday = this.editedUser.birthday
+      this.user.phoneNumber = this.editedUser.phoneNumber
+      Notify.create({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'fas fa-save',
+        message: 'Данные успешно изменены'
+      })
+      this.resetChangeUserData()
+    },
+    resetChangeUserData(){
+      this.isProfileInfoEditing = false
+      this.editedUser.name = this.user.name
+      this.editedUser.surname = this.user.surname
+      this.editedUser.patronymic = this.user.patronymic
+      this.editedUser.status = this.user.status
+      this.editedUser.about = this.user.about
+      this.editedUser.birthday = this.user.birthday
+      this.editedUser.phoneNumber = this.user.phoneNumber
+    },
+    resetChangePassword() {
+      this.isPasswordEditing = false
+      this.isPwd1 = true
+      this.isPwd2 = true
+      this.editedUser.newPassword = ""
+      this.editedUser.confirmPassword = ""
+      this.editedUser.oldPassword = ""
+    },
+    resetEditSecDataBtn() {
+      this.isProfileSecEditing = false
+      this.editedUser.email = this.user.email
+      this.editedUser.username = this.user.username
+    },
+
     openConfirmDeleteUserDialog(id) {
       this.deleteUser.id = id;
       for (let i = 0; i < this.subusers.length; i++) {
