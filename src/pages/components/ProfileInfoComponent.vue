@@ -3,10 +3,17 @@
     <q-card flat bordered>
       <q-card-section horizontal class="flex">
         <q-card-section class="q-pt-xs col-7">
-          <div class="text-h5 q-mt-sm q-mb-xs">{{ user.surname }} {{ user.name }} {{ user.patronymic }}</div>
-          <div class="text-caption text-grey" style="white-space: normal">
+          <q-card-section class="text-h5 q-mt-sm q-mb-xs">{{ user.surname }} {{ user.name }} {{
+              user.patronymic
+            }}
+          </q-card-section>
+          <q-card-section class="text-caption text-grey" style="white-space: normal">
             {{ user.status }}
-          </div>
+          </q-card-section>
+          <q-separator/>
+          <q-card-section>
+            {{ user.about }}
+          </q-card-section>
         </q-card-section>
 
         <q-card-section class="col-5" style="flex-grow: 1">
@@ -16,10 +23,6 @@
             style="max-width: 200px; max-height: 200px"
           />
         </q-card-section>
-      </q-card-section>
-      <q-separator/>
-      <q-card-section>
-        {{ user.about }}
       </q-card-section>
       <q-separator></q-separator>
       <q-form
@@ -46,7 +49,8 @@
         />
         <div class="flex">
           <div style="flex-grow: 1"></div>
-          <q-btn :disable="isProfileSecEditing" v-if="!isProfileSecEditing" flat color="primary" label="Изменить"
+          <q-btn :disable="isProfileSecEditing" v-if="!isProfileSecEditing" flat color="primary"
+                 label="Изменить личные данные"
                  no-caps @click="isProfileSecEditing = true"/>
           <q-btn :disable="!isProfileSecEditing" v-if="isProfileSecEditing" flat color="primary" label="Отменить"
                  no-caps @click="resetEditSecDataBtn"/>
@@ -55,35 +59,22 @@
                  no-caps/>
         </div>
       </q-form>
+      <q-separator/>
+      <!--todo проверка сравнения паролей на фронте или беке-->
       <q-form
         class="q-gutter-md q-ma-sm"
         @submit="submitChangePassword"
       >
         <q-input
           filled
-          v-model="editedUser.password"
-          label="Пароль"
-          readonly
-          type="password"
-          v-if="!this.isPasswordEditing"
-        />
-        <q-input
-          filled
           v-model="editedUser.oldPassword"
           label="Введите старый пароль"
           :readonly="!isPasswordEditing"
-          :type="isPwd1 ? 'password' : 'text'"
+          type='password'
           v-if="this.isPasswordEditing"
           lazy-rules
-          :rules="[val => val === editedUser.password || 'Пароли не совпадают']"
+          :rules="[val => val === user.password || 'Пароли не совпадают']"
         >
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd1 ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd1 = !isPwd1"
-            />
-          </template>
         </q-input>
         <!--todo добавить метод проверки паролей через regexp-->
         <q-input
@@ -100,22 +91,15 @@
           v-model="editedUser.confirmPassword"
           label="Подтвердите новый пароль"
           :readonly="!isPasswordEditing"
-          :type="isPwd2 ? 'password' : 'text'"
+          type='password'
           v-if="this.isPasswordEditing"
           lazy-rules
           :rules="[val => val === editedUser.newPassword || 'Пароль не совпадает']"
         >
-          <template v-slot:append>
-            <q-icon
-              :name="isPwd2 ? 'visibility_off' : 'visibility'"
-              class="cursor-pointer"
-              @click="isPwd2 = !isPwd2"
-            />
-          </template>
         </q-input>
         <div class="flex">
           <div style="flex-grow: 1"></div>
-          <q-btn :disable="isPasswordEditing" v-if="!isPasswordEditing" flat color="primary" label="Изменить"
+          <q-btn :disable="isPasswordEditing" v-if="!isPasswordEditing" flat color="primary" label="Изменить пароль"
                  no-caps @click="this.isPasswordEditing = true"/>
           <q-btn :disable="!isPasswordEditing" v-if="isPasswordEditing" flat color="primary" label="Отменить"
                  no-caps @click="resetChangePassword"/>
@@ -182,6 +166,7 @@
             :readonly="!isProfileInfoEditing"
             type="date"
           />
+          <!--todo пофиксить на рефреше некорректное поведение (да что с тобой не так)-->
           <q-input
             filled
             v-model="editedUser.phoneNumber"
@@ -189,7 +174,8 @@
             :readonly="!isProfileInfoEditing"
             mask="+# - (###) - ### - ## - ##"
             lazy-rules
-            :rules="[val => (val && val.length === '+# - (###) - ### - ## - ##'.length || (!val)) || 'Проверьте корректность']"
+            fill-mask
+            :rules="[val => ((val && val.length === '+# - (###) - ### - ## - ##'.length) || (!val)) || 'Проверьте корректность']"
             type="tel"
           />
 
@@ -239,7 +225,6 @@ export default {
       isProfileInfoEditing: false,
       isProfileSecEditing: false,
       isPasswordEditing: false,
-      isPwd1: true, isPwd2: true,
       user, editedUser
     }
   },
@@ -303,7 +288,7 @@ export default {
       this.isProfileSecEditing = false
       this.editedUser.email = this.user.email
       this.editedUser.username = this.user.username
-    },
+    }
   }
 }
 </script>
