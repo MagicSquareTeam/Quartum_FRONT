@@ -47,7 +47,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered :width="250">
       <div class="q-ma-md">
         <q-icon
           class="q-pa-sm icon-center"
@@ -90,8 +90,7 @@
       </q-list>
     </q-drawer>
 
-    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" bordered>
-
+    <q-drawer show-if-above side="right" bordered :width="280">
       <div class="q-pa-md">
         <span class="text-weight-bold text-h6">Новое</span>
         <div style="min-width: 250px; max-width: 300px">
@@ -108,8 +107,12 @@
         </div>
 <!--todo связь с бд для вывода первых ~5 записей по тегу-->
         <div class="q-pa-md" style="max-width: 350px">
-          <q-list>
-            <q-item>
+          <q-list
+
+          >
+            <q-item
+
+            >
               <q-item-section>
                 <q-item-label>Single line item</q-item-label>
                 <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
@@ -166,7 +169,6 @@ import {ref} from 'vue'
 export default {
   setup() {
     const leftDrawerOpen = ref(false)
-    const rightDrawerOpen = ref(false)
 
     return {
       btn_toggle: ref('one'),
@@ -175,6 +177,7 @@ export default {
       options: [
         'Tag #1', 'Tag #2', 'Tag #3'
       ],
+
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
