@@ -6,6 +6,7 @@
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer"/>
 
         <q-toolbar-title class="text-weight-bold">
+          <!--todo отцентрировать-->
           <div class="absolute-center">
             <q-icon
               id="icon1"
@@ -44,6 +45,7 @@
             </q-item>
           </q-list>
         </q-btn-dropdown>
+        <q-btn flat rounded no-caps no-wrap align="center" push color="white" icon="fas fa-sign-in-alt" label="Вход" @click="openLoginDialog"/>
       </q-toolbar>
     </q-header>
 
@@ -105,7 +107,7 @@
             stack-label
             label="Multiple selection"/>
         </div>
-<!--todo связь с бд для вывода первых ~5 записей по тегу-->
+        <!--todo связь с бд для вывода первых ~5 записей по тегу-->
         <div class="q-pa-md" style="max-width: 350px">
           <q-list
 
@@ -115,46 +117,51 @@
             >
               <q-item-section>
                 <q-item-label>Single line item</q-item-label>
-                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+                </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
                 <q-item-label caption>2 min ago</q-item-label>
-                <q-badge class="q-mt-sm" color="teal" label="10k" />
+                <q-badge class="q-mt-sm" color="teal" label="10k"/>
               </q-item-section>
             </q-item>
 
-            <q-separator spaced inset />
+            <q-separator spaced inset/>
 
             <q-item>
               <q-item-section>
                 <q-item-label>Single line item</q-item-label>
-                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+                </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
                 <q-item-label caption>2 min ago</q-item-label>
-                <q-badge class="q-mt-sm" color="teal" label="10k" />
+                <q-badge class="q-mt-sm" color="teal" label="10k"/>
               </q-item-section>
             </q-item>
 
-            <q-separator spaced inset />
+            <q-separator spaced inset/>
 
             <q-item>
               <q-item-section>
                 <q-item-label>Single line item</q-item-label>
-                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.
+                </q-item-label>
               </q-item-section>
 
               <q-item-section side top>
                 <q-item-label caption>2 min ago</q-item-label>
-                <q-badge class="q-mt-sm" color="teal" label="10k" />
+                <q-badge class="q-mt-sm" color="teal" label="10k"/>
               </q-item-section>
             </q-item>
           </q-list>
         </div>
       </div>
     </q-drawer>
+
+    <LoginDialogComponent v-model="loginDialogOpened"/>
 
     <q-page-container>
       <router-view/>
@@ -165,14 +172,17 @@
 
 <script>
 import {ref} from 'vue'
+import LoginDialogComponent from "components/LoginDialogComponent";
 
 export default {
+  components: {LoginDialogComponent},
   setup() {
     const leftDrawerOpen = ref(false)
 
     return {
       btn_toggle: ref('one'),
       modelMultiple: ref(),
+      loginDialogOpened: ref(false),
 
       options: [
         'Tag #1', 'Tag #2', 'Tag #3'
@@ -185,11 +195,14 @@ export default {
     }
   },
   methods: {
-    selectAddTag(tag){
+    selectAddTag(tag) {
       console.log("added #" + tag.index + ": " + tag.value)
     },
-    selectRemoveTag(tag){
+    selectRemoveTag(tag) {
       console.log("removed #" + tag.index + ": " + tag.value)
+    },
+    openLoginDialog(){
+      this.loginDialogOpened = true
     }
   }
 }
