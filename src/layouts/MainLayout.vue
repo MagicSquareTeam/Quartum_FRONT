@@ -21,31 +21,33 @@
 
         <q-space></q-space>
 
-        <q-btn flat rounded push icon="fas fa-plus"/>
+        <div v-if="loggedIn">
+          <q-btn flat rounded push icon="fas fa-plus"/>
 
-        <q-btn-dropdown flat rounded push>
-          <template v-slot:label>
-            <div class="row items-center no-wrap">
-              <q-avatar size="42px">
-                <img src="https://cdn.quasar.dev/img/avatar2.jpg">
-              </q-avatar>
-            </div>
-          </template>
-          <q-list>
-            <q-item clickable v-close-popup @click="onItemClick">
-              <q-item-section>
-                <q-item-label>Профиль</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-separator color="black" inset/>
-            <q-item clickable v-close-popup @click="onItemClick">
-              <q-item-section>
-                <q-item-label>Выйти</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
-        <q-btn flat rounded no-caps no-wrap align="center" push color="white" icon="fas fa-sign-in-alt" label="Вход" @click="openLoginDialog"/>
+          <q-btn-dropdown flat rounded push>
+            <template v-slot:label>
+              <div class="row items-center no-wrap">
+                <q-avatar size="42px">
+                  <img src="https://cdn.quasar.dev/img/avatar2.jpg">
+                </q-avatar>
+              </div>
+            </template>
+            <q-list>
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Профиль</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-separator color="black" inset/>
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>Выйти</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </div>
+        <q-btn v-if="!loggedIn" flat rounded no-caps no-wrap align="center" push color="white" icon="fas fa-sign-in-alt" label="Вход" @click="openLoginDialog"/>
       </q-toolbar>
     </q-header>
 
@@ -203,6 +205,11 @@ export default {
     },
     openLoginDialog(){
       this.loginDialogOpened = true
+    }
+  },
+  computed: {
+    loggedIn(){
+      return this.$store.state.auth.loggedIn
     }
   }
 }
