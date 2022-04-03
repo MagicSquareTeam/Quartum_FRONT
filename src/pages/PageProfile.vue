@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import ProfileInfoComponent from "pages/components/ProfileInfoComponent";
-import ProfileSubsComponent from "pages/components/ProfileSubsComponent";
-import ProfileArticlesComponent from "pages/components/ProfileArticlesComponent";
+import ProfileInfoComponent from "../components/ProfileInfoComponent";
+import ProfileSubsComponent from "../components/ProfileSubsComponent";
+import ProfileArticlesComponent from "../components/ProfileArticlesComponent";
 
 export default {
   name: "PageProfile",
