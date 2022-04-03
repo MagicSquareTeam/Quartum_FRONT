@@ -18,13 +18,17 @@
           label="Пароль"
           :rules="[val => val && val.length > 5 || 'Проверьте корректность']"
         />
-        <q-btn :loading="loading" color="primary" style="width: 150px" type="submit">
-          Войти
-          <template v-slot:loading>
-            <q-spinner-hourglass class="on-left"/>
-            Загрузка...
-          </template>
-        </q-btn>
+        <div class="flex">
+          <span style="flex-grow: 1"></span>
+          <q-btn :loading="loading" color="primary" style="width: 150px" type="submit" no-caps flat>
+            Войти
+            <template v-slot:loading>
+              <q-spinner-hourglass class="on-left"/>
+              Загрузка...
+            </template>
+          </q-btn>
+        </div>
+
       </q-form>
     </div>
   </div>
@@ -46,11 +50,6 @@ export default {
     loggedIn() {
       return this.$store.state.auth.loggedIn;
     },
-  },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push("/profile");
-    }
   },
   methods: {
     sendLoginRequest() {
