@@ -7,12 +7,12 @@ class AuthService {
   login(user) {
     return axios
       .post(API_URL_DEBUG + 'signin', {
-        // username/email
-        login: user.login,
+        username: /(.+)@(.+){2,}\.(.+){2,}/.test(user.login) ? "" : user.login,
+        email: /(.+)@(.+){2,}\.(.+){2,}/.test(user.login) ? user.login : "",
         password: user.password
       })
       .then(response => {
-        if (response.data.accessToken) {
+        if (response.data.token) {
           localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;
