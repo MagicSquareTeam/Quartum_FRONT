@@ -7,8 +7,22 @@
           v-model="user.username"
           filled
           lazy-rules
-          label="Имя пользователя"
+          label="Ваш логин"
           :rules="[val => val && val.length > 5 || 'Проверьте корректность']"
+        />
+        <q-input
+          v-model="user.name"
+          filled
+          lazy-rules
+          label="Имя"
+          :rules="[val => val && /^[a-zA-Zа-яА-Я ]+$/.test(val) || 'Проверьте корректность']"
+        />
+        <q-input
+          v-model="user.surname"
+          filled
+          lazy-rules
+          label="Фамилия"
+          :rules="[val => val && /^[a-zA-Zа-яА-Я ]+$/.test(val) || 'Проверьте корректность']"
         />
         <q-input
           v-model="user.email"
@@ -17,6 +31,25 @@
           lazy-rules
           label="Почта"
           :rules="[val => /(.+)@(.+){2,}\.(.+){2,}/.test(val) || 'Введите корректную почту']"
+        />
+        <q-input
+          filled
+          v-model="user.phoneNumber"
+          label="Номер телефона"
+          mask="+# - (###) - ### - ## - ##"
+          lazy-rules
+          fill-mask
+          :rules="[val => ((val && val.length === '+# - (###) - ### - ## - ##'.length) || (!val)) || 'Проверьте корректность']"
+          type="tel"
+        />
+        <q-input
+          v-model="user.birthday"
+          filled
+          lazy-rules
+          stack-label
+          label="День рождения"
+          type="date"
+          :rules="[val => val && val.length > 5 || 'Проверьте корректность']"
         />
         <q-input
           v-model="user.password"
@@ -56,6 +89,10 @@ export default {
     return {
       user: {
         username: '',
+        name: '',
+        surname: '',
+        birthday: '',
+        phoneNumber: '',
         email: '',
         password: ''
       },
@@ -77,6 +114,8 @@ export default {
       }, 3000)
     },
     registerUser(user) {
+      user.phoneNumber = user.phoneNumber.match(/\d+/g).join('')
+      console.log(user.phoneNumber)
       this.$store.dispatch("auth/register", user).then(
         (data) => {
           this.message = data.message;

@@ -161,6 +161,7 @@
           />
           <q-input
             filled
+            stack-label
             v-model="editedUser.birthday"
             label="День рождения"
             :readonly="!isProfileInfoEditing"

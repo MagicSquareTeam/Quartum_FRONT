@@ -1,11 +1,12 @@
 import axios from 'axios';
 
 const API_URL = 'https://quartum.herokuapp.com/api/auth/';
+const API_URL_DEBUG = 'http://localhost:8080/api/auth/';
 
 class AuthService {
   login(user) {
     return axios
-      .post(API_URL + 'signin', {
+      .post(API_URL_DEBUG + 'signin', {
         // username/email
         login: user.login,
         password: user.password
@@ -23,8 +24,12 @@ class AuthService {
   }
 
   register(user) {
-    return axios.post(API_URL + 'signup', {
+    return axios.post(API_URL_DEBUG + 'signup', {
       username: user.username,
+      name: user.name,
+      surname: user.surname,
+      phoneNumber: user.phoneNumber,
+      birthday: user.birthday,
       email: user.email,
       password: user.password
     });
