@@ -200,33 +200,41 @@
 
 <script>
 import {Notify} from "quasar";
+import {user} from "src/store/auth/getters";
 
 export default {
   name: "ProfileInfoComponent",
   data() {
-    let user = {
-      name: 'Имя',
-      surname: 'Фамилия',
-      patronymic: "Отчество",
-      username: "Username1",
-      password: "MyPASSword",
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-      email: "email@luga.ru",
-      birthday: '2000-05-19',
-      about: "Все обо мне",
-      status: 'Верни шаверму',
-      photo: "",
-      phoneNumber: "88005553535"
-    }
-    let editedUser = Object.create(user)
+    // let user = {
+    //   name: 'Имя',
+    //   surname: 'Фамилия',
+    //   patronymic: "Отчество",
+    //   username: "Username1",
+    //   password: "MyPASSword",
+    //   oldPassword: "",
+    //   newPassword: "",
+    //   confirmPassword: "",
+    //   email: "email@luga.ru",
+    //   birthday: '2000-05-19',
+    //   about: "Все обо мне",
+    //   status: 'Верни шаверму',
+    //   photo: "",
+    //   phoneNumber: "88005553535"
+    // }
 
     return {
       isProfileInfoEditing: false,
       isProfileSecEditing: false,
       isPasswordEditing: false,
-      user, editedUser
+    }
+  },
+  computed: {
+    user(){
+      console.log(this.$store.state.auth.user)
+      return this.$store.state.auth.user;
+    },
+    editedUser(){
+      return this.$store.state.auth.user;
     }
   },
   methods: {

@@ -174,7 +174,7 @@
 
 <script>
 import {ref} from 'vue'
-import LoginDialogComponent from "components/LoginDialogComponent";
+import LoginDialogComponent from "components/auth/LoginDialogComponent";
 
 export default {
   components: {LoginDialogComponent},

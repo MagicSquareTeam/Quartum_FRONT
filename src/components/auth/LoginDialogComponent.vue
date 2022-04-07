@@ -32,8 +32,8 @@
 
 <script>
 import {ref} from 'vue'
-import LoginComponent from "components/LoginComponent";
-import RegisterComponent from "components/RegisterComponent";
+import LoginComponent from "components/auth/LoginComponent";
+import RegisterComponent from "components/auth/RegisterComponent";
 
 export default {
   name: "LoginDialogComponent",
