@@ -35,5 +35,15 @@ export default route(function (/* { store, ssrContext } */) {
     ),
   });
 
+  Router.beforeEach((to, from, next) => {
+    const publicPages = ['/', '/overview']
+    const authRequired = !publicPages.includes(to.path)
+    const loggedIn = localStorage.getItem('user')
+    if (authRequired && !loggedIn)
+      next('/')
+    else
+      next()
+  })
+
   return Router;
 });
