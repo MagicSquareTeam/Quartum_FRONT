@@ -1,11 +1,19 @@
 <template>
-Overview
+  <q-list class="q-mt-sm" dense bordered>
+    <ArticleItemComponent/>
+  </q-list>
 </template>
 
 <script>
+import ArticleItemComponent from "components/ArticleItemComponent";
+
 export default {
   name: "PageOverview",
-  icon: "icon123"
+  components: {ArticleItemComponent},
+  data() {
+
+    return {}
+  }
 }
 </script>
 
