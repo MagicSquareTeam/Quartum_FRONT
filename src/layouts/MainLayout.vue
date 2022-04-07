@@ -39,7 +39,7 @@
                 </q-item-section>
               </q-item>
               <q-separator color="black" inset/>
-              <q-item clickable v-close-popup @click="onItemClick">
+              <q-item clickable v-close-popup @click="logout">
                 <q-item-section>
                   <q-item-label>Выйти</q-item-label>
                 </q-item-section>
@@ -197,6 +197,22 @@ export default {
     }
   },
   methods: {
+    logout(){
+      this.$store.dispatch("auth/logout").then(
+        () => {
+          this.$router.push("/overview");
+        },
+        (error) => {
+          const message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          console.log(message)
+        }
+      )
+    },
     selectAddTag(tag) {
       console.log("added #" + tag.index + ": " + tag.value)
     },
