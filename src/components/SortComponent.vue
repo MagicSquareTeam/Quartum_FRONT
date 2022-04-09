@@ -1,26 +1,28 @@
 <template>
-  <q-item>
-    <q-item-section class="col-6">
-      <div style="min-width: 250px; max-width: 300px">
-        <q-select
-          filled
-          @update:model-value="onChangeTag"
-          v-model="modelMultiple"
-          multiple
-          :options="options"
-          use-chips
-          stack-label
-          label="Теги"/>
-      </div>
-    </q-item-section>
-    <q-item-section class="col-3">
+  <div>
+    <q-item>
+      <q-item-section class="col-6">
+        <div style="min-width: 250px; max-width: 300px">
+          <q-select
+            filled
+            @update:model-value="onChangeTag"
+            v-model="modelMultiple"
+            multiple
+            :options="options"
+            use-chips
+            stack-label
+            label="Теги"/>
+        </div>
+      </q-item-section>
+      <q-item-section class="col-3">
 
-    </q-item-section>
-    <q-item-section class="col-3">
+      </q-item-section>
+      <q-item-section class="col-3">
 
-    </q-item-section>
-  </q-item>
-  <q-separator/>
+      </q-item-section>
+    </q-item>
+    <q-separator/>
+  </div>
 </template>
 
 <script>

@@ -47,7 +47,8 @@
 
         <div key="article1" id='article_list'>
           <q-list separator v-for="art in articles" :key="art.id">
-            <ArticleItemComponent :article="art"></ArticleItemComponent>
+            <ArticleItemComponent :article="art" :is-archive="false"></ArticleItemComponent>
+            <q-separator/>
           </q-list>
         </div>
 
@@ -71,17 +72,20 @@ export default defineComponent({
         {
           username: 'Lava Yasha',
           title: 'Super title',
-          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa',
+          rating: 0
         },
         {
           username: 'Lava Yasha',
           title: 'Super title',
-          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa',
+          rating: 10
         },
         {
           username: 'Lava Yasha',
           title: 'Super title',
-          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa',
+          rating: -40
         }
       ]
     }
