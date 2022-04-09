@@ -12,11 +12,11 @@
         <q-item-section top class="col-8 flex">
             <q-card-section horizontal>
               <q-item-label class="q-pa-sm q-ml-sm items-center justify-center flex row">
-                Логин
+                {{ article.username }}
               </q-item-label>
               <q-btn label="Подписаться" flat color="primary" no-caps align="left" no-wrap></q-btn>
             </q-card-section>
-            <q-item-label class="q-ml-sm q-pl-sm text-weight-bold" style="flex-grow: 1">Тема статьи</q-item-label>
+            <q-item-label class="q-ml-sm q-pl-sm text-weight-bold" style="flex-grow: 1">{{ article.title }}</q-item-label>
         </q-item-section>
         <q-item-section top class="col-3" align="right">
           <q-item-label>Дата публикации</q-item-label>
@@ -41,10 +41,7 @@
 export default {
   name: "ArticleComponent",
   props: {
-    article: {
-      text: String,
-      tag: String
-    }
+    article: {}
   },
   data() {
 

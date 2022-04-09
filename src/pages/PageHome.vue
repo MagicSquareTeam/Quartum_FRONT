@@ -39,34 +39,30 @@
         size="10px"
       />
 
-      <q-list separator>
-        <transition-group
-          appear
-          enter-active-class="animated fadeIn slow"
-          leave-active-class="animated fadeOut slow"
-        >
+      <transition-group
+        appear
+        enter-active-class="animated fadeIn slow"
+        leave-active-class="animated fadeOut slow"
+      >
 
+        <div key="article1" id='article_list'>
+          <q-list separator v-for="art in articles" :key="art.id">
+            <ArticleItemComponent :article="art"></ArticleItemComponent>
+          </q-list>
+        </div>
 
-          <div id='article_list'>
-            <template v-for="art in articles" :key="art.id">
-              <ArticleComponent :article = art></ArticleComponent>
-            </template>
-          </div>
-
-
-        </transition-group>
-      </q-list>
+      </transition-group>
     </q-scroll-area>
   </q-page>
 </template>
 
 <script>
 import {defineComponent} from "vue";
-import ArticleComponent from "components/ArticleComponent";
+import ArticleItemComponent from "components/ArticleItemComponent";
 
 export default defineComponent({
   name: "PageHome",
-  components: {ArticleComponent},
+  components: {ArticleItemComponent},
 
   data() {
     return {
@@ -75,17 +71,17 @@ export default defineComponent({
         {
           username: 'Lava Yasha',
           title: 'Super title',
-          description: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
         },
         {
           username: 'Lava Yasha',
           title: 'Super title',
-          description: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
         },
         {
           username: 'Lava Yasha',
           title: 'Super title',
-          description: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
         }
       ]
     }
@@ -96,7 +92,7 @@ export default defineComponent({
       let article = {
         username: 'Lava Yasha',
         title: 'Super title',
-        description: this.newArticleContent
+        text: this.newArticleContent
       }
       this.newArticleContent = ''
 
