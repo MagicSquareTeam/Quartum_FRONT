@@ -45,11 +45,15 @@
           enter-active-class="animated fadeIn slow"
           leave-active-class="animated fadeOut slow"
         >
+
+
           <div id='article_list'>
             <template v-for="art in articles" :key="art.id">
-              <component :is="art.component"></component>
+              <ArticleComponent :article = art></ArticleComponent>
             </template>
           </div>
+
+
         </transition-group>
       </q-list>
     </q-scroll-area>
@@ -62,30 +66,44 @@ import ArticleComponent from "components/ArticleComponent";
 
 export default defineComponent({
   name: "PageHome",
-  // components: {ArticleComponent},
+  components: {ArticleComponent},
 
   data() {
     return {
       newArticleContent: '',
-      articles: []
+      articles: [
+        {
+          username: 'Lava Yasha',
+          title: 'Super title',
+          description: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+        },
+        {
+          username: 'Lava Yasha',
+          title: 'Super title',
+          description: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+        },
+        {
+          username: 'Lava Yasha',
+          title: 'Super title',
+          description: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa'
+        }
+      ]
     }
   },
 
   methods: {
     addNewArticle() {
       let article = {
-        content: this.newArticleContent,
-        date: Date.now(),
-        liked: false
+        username: 'Lava Yasha',
+        title: 'Super title',
+        description: this.newArticleContent
       }
       this.newArticleContent = ''
 
-      this.articles.push(ArticleComponent())
+      this.articles.push(article)
     }
 
   }
-
-
 
 
 });
