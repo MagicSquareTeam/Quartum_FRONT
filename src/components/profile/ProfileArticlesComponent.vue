@@ -21,13 +21,13 @@
             </q-item-section>
 
             <q-item-section class="col-4 justify-center items-center text-center">
-              <q-item-label lines="2">{{ article.tag }}</q-item-label>
+              <q-item-label lines="2">{{ article.tagName }}</q-item-label>
             </q-item-section>
 
             <q-item-section class="col-2 justify-center items-center">
               <div>
                 <q-icon name="far fa-star" color="primary" size="xs"></q-icon>
-                <span class="q-ma-sm">{{ article.stars }}</span>
+                <span class="q-ma-sm">{{ article.starred_userIds.length }}</span>
               </div>
               <div>
                 <q-icon name="fas fa-smile-beam" color="primary" size="xs"></q-icon>
@@ -36,8 +36,8 @@
             </q-item-section>
 
             <q-item-section class="col-3 justify-center items-center text-center" side>
-              <q-item-label lines="4">Создано: {{ article.created }}</q-item-label>
-              <q-item-label lines="4">Редакт.: {{ article.edited }}</q-item-label>
+              <q-item-label lines="4">Создано: {{ article.creationDate }}</q-item-label>
+              <q-item-label lines="4">Редакт.: {{ article.editTime }}</q-item-label>
             </q-item-section>
 
             <q-item-section class="col-1 justify-center items-center text-center" side>
@@ -103,41 +103,22 @@
 
 <script>
 import {ref} from "vue";
+import ArticleService from "src/services/article.service";
 
 export default {
   name: "ProfileArticlesComponent",
   data() {
     let articles = [
-      {
-        id: 1,
-        name: "Статья 1",
-        tag: "Тег статьи 1",
-        stars: 10,
-        rating: 19,
-        created: "25 окт. 2021",
-        edited: "20 мар. 2022",
-        archived: false
-      },
-      {
-        id: 2,
-        name: "Статья 2",
-        tag: "Тег статьи 2",
-        stars: 0,
-        rating: -15,
-        created: "26 окт. 2021",
-        edited: "21 мар. 2022",
-        archived: true
-      },
-      {
-        id: 3,
-        name: "Статья 3",
-        tag: "Тег статьи 3",
-        stars: 5,
-        rating: 100,
-        created: "27 окт. 2021",
-        edited: "22 мар. 2022",
-        archived: false
-      },
+      // {
+      //   id: 1,
+      //   name: "Статья 1",
+      //   tag: "Тег статьи 1",
+      //   stars: 10,
+      //   rating: 19,
+      //   created: "25 окт. 2021",
+      //   edited: "20 мар. 2022",
+      //   archived: false
+      // }
     ]
 
     return {
@@ -210,6 +191,18 @@ export default {
         return res
       })
     }
+  },
+  mounted() {
+
+    ArticleService.getUserArticles(this.$store.state.auth.user.userId).then(
+      response => {
+        this.articles = response.data
+        console.log(this.articles)
+      },
+      error => {
+        console.log(error)
+      }
+    )
   }
 }
 </script>

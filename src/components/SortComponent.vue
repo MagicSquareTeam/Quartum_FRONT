@@ -90,7 +90,7 @@ export default {
       } else {
         this.sortedArticles = this.articles.filter(article => {
           for (let i = 0; i < tags.length; i++)
-            if (tags[i] === article.tag)
+            if (tags[i] === article.tagName)
               return article
         })
       }
@@ -140,9 +140,9 @@ export default {
       let arr = Array.from(this.articles)
       arr.sort((a, b) => {
           if (asc)
-            return a.date_creation.localeCompare(b.date_creation) || b.date_creation - a.date_creation
+            return a.creationDate.localeCompare(b.creationDate) || b.creationDate - a.creationDate
           else
-            return b.date_creation.localeCompare(a.date_creation) || a.date_creation - b.date_creation
+            return b.creationDate.localeCompare(a.creationDate) || a.creationDate - b.creationDate
         }
       );
       this.$emit('sortedArticles', arr)
@@ -151,9 +151,9 @@ export default {
       let arr = Array.from(this.articles)
       arr.sort((a, b) => {
           if (asc)
-            return a.date_edited.localeCompare(b.date_edited) || b.date_edited - a.date_edited
+            return a.editTime.localeCompare(b.editTime) || b.editTime - a.editTime
           else
-            return b.date_edited.localeCompare(a.date_edited) || a.date_edited - b.date_edited
+            return b.editTime.localeCompare(a.editTime) || a.editTime - b.editTime
         }
       );
       this.$emit('sortedArticles', arr)

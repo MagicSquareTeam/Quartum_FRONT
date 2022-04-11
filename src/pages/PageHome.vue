@@ -60,6 +60,7 @@
 <script>
 import {defineComponent} from "vue";
 import ArticleItemComponent from "components/ArticleItemComponent";
+import ArticleService from "../services/article.service"
 
 export default defineComponent({
   name: "PageHome",
@@ -68,41 +69,40 @@ export default defineComponent({
   data() {
     return {
       newArticleContent: '',
-      articles: [
-        {
-          username: 'Lava Yasha',
-          title: 'Super title',
-          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa',
-          rating: 0
-        },
-        {
-          username: 'Lava Yasha',
-          title: 'Super title',
-          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa',
-          rating: 10
-        },
-        {
-          username: 'Lava Yasha',
-          title: 'Super title',
-          text: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa',
-          rating: -40
-        }
-      ]
+      articles: []
     }
   },
-
   methods: {
     addNewArticle() {
+      const now = new Date();
+      const date = now.getFullYear() + '-' + (now.getMonth() < 10 ? '0' : '') + (now.getMonth() + 1) + '-' + now.getDate();
+      const time = now.getHours() + ":" + now.getMinutes();
+      const dateTime = date + ' ' + time;
+      let user = this.$store.state.auth.user
+      console.log(user)
       let article = {
         username: 'Lava Yasha',
         title: 'Super title',
-        text: this.newArticleContent
+        name: 'title1',
+        text: this.newArticleContent,
+        rating: 0,
+        authorId: user.userId,
+        tagName: 'Tag #1',
+        archived: false,
+        edited: false,
+        creationDate: dateTime
       }
       this.newArticleContent = ''
-
       this.articles.push(article)
+      ArticleService.publicNewArticle(article).then(
+        response => {
+          console.log(response.data)
+        },
+        error => {
+          console.log(error)
+        }
+      )
     }
-
   }
 
 

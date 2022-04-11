@@ -8,40 +8,13 @@
 <script>
 import ArticleItemComponent from "components/ArticleItemComponent";
 import SortComponent from "components/SortComponent";
+import ArticleService from "src/services/article.service";
 
 export default {
   name: "PageOverview",
   components: {ArticleItemComponent, SortComponent},
   data() {
-    let articles = [
-      {
-        username: "Author1",
-        title: "title1",
-        text: "Text 1",
-        rating: 4,
-        tag: "Tag #1",
-        date_creation: "2022-10-20",
-        date_edited: "2022-10-21"
-      },
-      {
-        username: "Author2",
-        title: "title2",
-        text: "Text 2",
-        rating: 0,
-        tag: "Tag #2",
-        date_creation: "2022-11-20",
-        date_edited: "2022-11-21"
-      },
-      {
-        username: "Author3",
-        title: "title3",
-        text: "Text 3",
-        rating: -100,
-        tag: "Tag #3",
-        date_creation: "2022-15-20",
-        date_edited: "2022-15-21"
-      }
-    ]
+    let articles = {}
     let sortedArticles = Object.assign({}, articles)
     return {
       articles, sortedArticles
@@ -51,6 +24,17 @@ export default {
     getSortedArticles(articles){
       this.sortedArticles = articles
     }
+  },
+  mounted() {
+    ArticleService.getAllArticles().then(
+      response => {
+        this.articles = response.data
+        this.sortedArticles = response.data
+      },
+      error => {
+        console.log(error)
+      }
+    )
   }
 }
 </script>

@@ -16,12 +16,12 @@
             </q-item-label>
             <q-btn label="Подписаться" flat color="primary" no-caps align="left" no-wrap></q-btn>
           </q-card-section>
-          <q-item-label class="q-ml-sm q-pl-sm text-weight-bold" style="flex-grow: 1">{{ article.title }}</q-item-label>
+          <q-item-label class="q-ml-sm q-pl-sm text-weight-bold" style="flex-grow: 1">{{ article.name }}</q-item-label>
         </q-item-section>
         <q-item-section top class="col-3" align="right">
-          <q-item-label v-if="article.date_creation">Создано: {{ article.date_creation }}</q-item-label>
-          <q-item-label v-if="article.date_edited">Редактировано: {{ article.date_edited }}</q-item-label>
-          <q-item-label>{{ article.tag }}</q-item-label>
+          <q-item-label v-if="article.creationDate">Создано: {{ article.creationDate }}</q-item-label>
+          <q-item-label v-if="article.editTime">Редактировано: {{ article.editTime }}</q-item-label>
+          <q-item-label>{{ article.tagName }}</q-item-label>
         </q-item-section>
       </q-card-section>
       <q-item-section class="q-pa-md text-body2 text-justify">
