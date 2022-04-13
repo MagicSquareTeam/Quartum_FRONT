@@ -10,8 +10,13 @@ export class ArticleService {
     return axios.post(API_URL_ARTICLE_DEBUG + 'addNewArticle', article, {headers: authHeader()})
   }
 
+  updateArticle(article) {
+    console.log(article)
+    return axios.post(API_URL_ARTICLE_DEBUG + 'updateArticle', article, {headers: authHeader()})
+  }
+
   getAllArticles() {
-    return axios.get(API_URL_PUBLIC_DEBUG + 'getAllArticles',{headers: authHeader()})
+    return axios.get(API_URL_PUBLIC_DEBUG + 'getAllArticles')
   }
 
   getUserArticles(id){

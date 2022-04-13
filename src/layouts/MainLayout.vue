@@ -47,7 +47,8 @@
             </q-list>
           </q-btn-dropdown>
         </div>
-        <q-btn v-if="!loggedIn" flat rounded no-caps no-wrap align="center" push color="white" icon="fas fa-sign-in-alt" label="Вход" @click="openLoginDialog"/>
+        <q-btn v-if="!loggedIn" flat rounded no-caps no-wrap align="center" push color="white" icon="fas fa-sign-in-alt"
+               label="Вход" @click="openLoginDialog"/>
       </q-toolbar>
     </q-header>
 
@@ -104,7 +105,7 @@
             filled
             v-model="modelMultiple"
             multiple
-            :options="options"
+            :options="tags"
             use-chips
             stack-label
             label="Multiple selection"/>
@@ -180,16 +181,10 @@ export default {
   components: {LoginDialogComponent},
   setup() {
     const leftDrawerOpen = ref(false)
-
     return {
       btn_toggle: ref('one'),
       modelMultiple: ref(),
       loginDialogOpened: ref(false),
-
-      options: [
-        'Tag #1', 'Tag #2', 'Tag #3'
-      ],
-
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value
@@ -197,7 +192,7 @@ export default {
     }
   },
   methods: {
-    logout(){
+    logout() {
       this.$store.dispatch("auth/logout").then(
         () => {
           this.$router.push("/overview");
@@ -219,14 +214,29 @@ export default {
     selectRemoveTag(tag) {
       console.log("removed #" + tag.index + ": " + tag.value)
     },
-    openLoginDialog(){
+    openLoginDialog() {
       this.loginDialogOpened = true
     }
   },
   computed: {
-    loggedIn(){
+    loggedIn() {
       return this.$store.state.auth.loggedIn
+    },
+    tags() {
+      let res = []
+      let t = this.$store.state.meta.tags
+      for (let i = 0; i < t.length; i++) {
+        res.push({
+          label: t[i].name,
+          value: t[i].name,
+          id: t[i].id
+        })
+      }
+      return res
     }
+  },
+  mounted() {
+    this.$store.dispatch("meta/getAllTags")
   }
 }
 </script>

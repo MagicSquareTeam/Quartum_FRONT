@@ -16,6 +16,7 @@
       <q-card-section>
         <q-list separator>
           <q-item class="flex" dense v-for="article in filteredArticles" :key="article.id">
+            <EditArticleDialog v-model="editArticleDialog" :article="article" @closeEditArticleDialog="editArticleDialog = false"/>
             <q-item-section class="col-2 justify-center items-center text-center" side>
               <q-item-label lines="3">{{ article.name }}</q-item-label>
             </q-item-section>
@@ -37,11 +38,11 @@
 
             <q-item-section class="col-3 justify-center items-center text-center" side>
               <q-item-label lines="4">Создано: {{ article.creationDate }}</q-item-label>
-              <q-item-label lines="4">Редакт.: {{ article.editTime }}</q-item-label>
+              <q-item-label lines="4" v-if="article.edited">Редакт.: {{ article.editTime }}</q-item-label>
             </q-item-section>
 
             <q-item-section class="col-1 justify-center items-center text-center" side>
-              <q-btn size="13px" flat round color="primary" icon="fas fa-edit">
+              <q-btn size="13px" flat round color="primary" icon="fas fa-edit" @click="editArticleDialog = true">
                 <q-tooltip class="orange-4">Редактировать</q-tooltip>
               </q-btn>
               <q-btn size="13px" flat round color="primary"
@@ -104,21 +105,29 @@
 <script>
 import {ref} from "vue";
 import ArticleService from "src/services/article.service";
+import EditArticleDialog from "components/profile/EditArticleDialog";
 
 export default {
   name: "ProfileArticlesComponent",
+  components: {EditArticleDialog},
   data() {
     let articles = [
-      // {
-      //   id: 1,
-      //   name: "Статья 1",
-      //   tag: "Тег статьи 1",
-      //   stars: 10,
-      //   rating: 19,
-      //   created: "25 окт. 2021",
-      //   edited: "20 мар. 2022",
-      //   archived: false
-      // }
+      {
+        id: 1,
+        name: "Статья 1",
+        tagName: "Tag #2",
+        rating: 19,
+        text: "text1",
+        edited: false,
+        creationDate: "2022-04-10 13:35",
+        editTime: "2022-04-10 13:37",
+        archived: false,
+        starred_userIds: [],
+        articlePictureIds: [],
+        articleVideoIds: [],
+        articleRatingIds: [],
+        articleFileIds: []
+      }
     ]
 
     return {
@@ -126,6 +135,7 @@ export default {
       articles,
       confirmArchiveArticleDialog: ref(false),
       confirmDeleteArticleDialog: ref(false),
+      editArticleDialog: ref(false),
       article: {
         id: -1,
         name: null,
@@ -193,11 +203,9 @@ export default {
     }
   },
   mounted() {
-
     ArticleService.getUserArticles(this.$store.state.auth.user.userId).then(
       response => {
         this.articles = response.data
-        console.log(this.articles)
       },
       error => {
         console.log(error)

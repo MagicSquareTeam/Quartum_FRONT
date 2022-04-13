@@ -22,7 +22,9 @@ export default {
     ProfileSubsComponent
   },
   data() {
-    return {}
+    return {
+
+    }
   }
 }
 </script>

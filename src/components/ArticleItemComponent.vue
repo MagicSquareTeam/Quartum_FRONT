@@ -19,14 +19,14 @@
           <q-item-label class="q-ml-sm q-pl-sm text-weight-bold" style="flex-grow: 1">{{ article.name }}</q-item-label>
         </q-item-section>
         <q-item-section top class="col-3" align="right">
-          <q-item-label v-if="article.creationDate">Создано: {{ article.creationDate }}</q-item-label>
-          <q-item-label v-if="article.editTime">Редактировано: {{ article.editTime }}</q-item-label>
+          <q-item-label>Создано: {{ article.creationDate }}</q-item-label>
+          <q-item-label v-if="article.edited">Редактировано: {{ article.editTime }}</q-item-label>
           <q-item-label>{{ article.tagName }}</q-item-label>
         </q-item-section>
       </q-card-section>
-      <q-item-section class="q-pa-md text-body2 text-justify">
-        {{ show_full ? article.text : article.text.slice(0, max_length) + '...' }}
-      </q-item-section>
+      <q-item-section class="q-pa-md text-body2 text-justify"
+                      v-html="show_full ? article.text : article.text.slice(0, max_length) + '...'"
+      />
       <q-item-section>
         <q-btn flat v-if="!show_full && !hide_buttons" label="Показать полностью" color="primary" @click="showArticle"
                no-caps align="left"/>
