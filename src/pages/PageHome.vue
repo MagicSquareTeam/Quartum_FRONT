@@ -1,36 +1,59 @@
 <template>
   <q-page class="relative-position">
     <q-scroll-area class="absolute full-width full-height">
-      <div class="q-py-lg q-px-md row items-end q-col-gutter-md">
-        <div class="col">
-          <q-input
-            v-model="newArticleContent"
-            class="new-article"
-            placeholder="What's happening?"
-            maxlength="400"
-            bottom-slots
-            counter
-            autogrow
-          >
-            <template v-slot:before>
-              <q-avatar size="xl">
-                <img src="https://cdn.quasar.dev/img/avatar.png">
-              </q-avatar>
-            </template>
-          </q-input>
+      <div class="q-py-lg q-px-md row q-col-gutter-md">
+        <div class="row flex justify-center items-center q-pr-sm">
+          <q-avatar size="xl" align="center">
+            <img src="https://cdn.quasar.dev/img/avatar.png">
+          </q-avatar>
         </div>
-        <div class="col col-shrink">
+        <div>
+          <q-editor v-model="newArticleContent" min-height="6rem"
+                    @update:model-value="updateNewPost"
+                    :style="[{'width' : (windowWidth - offset) + 'px'}]"
+                    :toolbar="[
+                                ['token'],
+                                ['bold', 'italic', 'underline'],
+                                [{
+                                  label: $q.lang.editor.formatting,
+                                  icon: $q.iconSet.editor.formatting,
+                                  list: 'no-icons',
+                                  options: ['p', 'h3', 'h4', 'h5', 'h6', 'code']
+                                }]]">
+            <template v-slot:token>
+              <q-btn-dropdown
+                dense no-caps
+                ref="tokenRef"
+                no-wrap
+                unelevated
+                color="white"
+                text-color="primary"
+                :label="selectedTag ? selectedTag : 'Выберите тег'"
+                size="sm"
+                auto-close
+              >
+                <q-list dense v-for="tag in tags" :key="tag.name">
+                  <q-item tag="label" clickable @click="selectedTag = tag.name">
+                    <q-item-section>{{ tag.name }}</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </template>
+          </q-editor>
+        </div>
+        <q-item-section side class="flex items-center justify-center">
           <q-btn
             @click="addNewArticle"
-            :disable="!newArticleContent"
-            class="q-mb-lg"
+            :disable="!newArticleContent || !selectedTag"
             color="primary"
             label="Post"
             rounded
+            class="q-mb-sm"
             unelevated
             no-caps
           />
-        </div>
+          <span>{{ removeHTML(newArticleContent).length }} / {{ maxLength }}</span>
+        </q-item-section>
       </div>
 
       <q-separator
@@ -69,7 +92,11 @@ export default defineComponent({
   data() {
     return {
       newArticleContent: '',
-      articles: []
+      articles: [],
+      windowWidth: window.innerWidth,
+      offset: 750,
+      selectedTag: null,
+      maxLength: 400
     }
   },
   methods: {
@@ -102,6 +129,35 @@ export default defineComponent({
           console.log(error)
         }
       )
+    },
+    handleWindowResize() {
+      this.windowWidth = this.$q.screen.width
+      if (this.windowWidth < 1007)
+        this.offset = 195
+      else
+        this.offset = 725
+    },
+    removeHTML(str){
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = str;
+      return tmp.textContent || tmp.innerText || "";
+    },
+    updateNewPost(text){
+      if (this.removeHTML(text).length > this.maxLength)
+        this.newArticleContent = text.slice(0, this.maxLength - 1)
+    }
+  },
+  computed: {
+    tags() {
+      return this.$store.state.meta.tags
+    }
+  },
+  created() {
+    this.handleWindowResize()
+  },
+  watch: {
+    "$q.screen.width"() {
+      this.handleWindowResize()
     }
   }
 

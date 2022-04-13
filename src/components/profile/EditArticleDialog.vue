@@ -29,10 +29,11 @@
           <q-item-label v-if="article.edited">Редактировано: {{ article.editTime }}</q-item-label>
         </q-item-section>
       </q-card-section>
-      <q-card-section>
-        <q-editor v-model="editedArticle.text"/>
+      <q-card-section class="q-mb-md">
+        <q-editor v-model="editedArticle.text" @update:model-value="updatePost"/>
+        <span class="float-right q-pr-sm q-pt-sm">{{ removeHTML(editedArticle.text).length }} / {{ maxLength }}</span>
       </q-card-section>
-      <q-card-section horizontal class="q-pa-md">
+      <q-card-section horizontal class="q-pa-md q-ma-sm">
         <q-btn outline rounded color="primary" class="q-ml-xl" label="Сохранить" no-caps align="left"
                @click="saveEditedArticle"/>
         <q-space/>
@@ -55,12 +56,19 @@ export default {
     return {
       editedArticle: Object.assign({}, this.article),
       editingName: false,
-      editingTag: false
+      editingTag: false,
+      maxLength: 400
     }
   },
   methods: {
     saveEditedArticle() {
       this.editedArticle.tagName = this.editedArticle.tagName.value
+      const now = new Date();
+      const date = now.getFullYear() + '-' + (now.getMonth() < 10 ? '0' : '') + (now.getMonth() + 1) + '-' + now.getDate();
+      const time = now.getHours() + ":" + now.getMinutes();
+      const dateTime = date + ' ' + time;
+      this.editedArticle.edited = true
+      this.editedArticle.editTime = dateTime
       ArticleService.updateArticle(this.editedArticle).then(
         response => {
           console.log(response)
@@ -74,6 +82,15 @@ export default {
     closeEditArticleDialog() {
       this.editedArticle = Object.assign({}, this.article)
       this.$emit("closeEditArticleDialog")
+    },
+    removeHTML(str){
+      const tmp = document.createElement("DIV");
+      tmp.innerHTML = str;
+      return tmp.textContent || tmp.innerText || "";
+    },
+    updatePost(text){
+      if (this.removeHTML(text).length > this.maxLength)
+        this.editedArticle.text = text.slice(0, this.maxLength - 1)
     }
   },
   computed: {
