@@ -1,8 +1,8 @@
 import axios from 'axios';
 import authHeader from './auth-header';
 
-const API_URL = 'https://quartum.herokuapp.com/api/test/';
-const API_URL_PROFILE_DEBUG = 'http://localhost:8080/api/profile/';
+const API_URL = 'https://quartum.herokuapp.com/api/user/';
+const API_URL_LOCAL = 'http://localhost:8080/api/user/';
 
 class UserService {
   getPublicContent() {
@@ -19,6 +19,10 @@ class UserService {
 
   getAdminBoard() {
     return axios.get(API_URL + 'admin', {headers: authHeader()});
+  }
+
+  getUserDate(id){
+    return axios.get(API_URL_LOCAL + 'getSubsArticles/' + id, {headers: authHeader()})
   }
 }
 

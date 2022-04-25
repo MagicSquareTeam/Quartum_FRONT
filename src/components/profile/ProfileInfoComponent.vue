@@ -200,7 +200,7 @@
 
 <script>
 import {Notify} from "quasar";
-import {user} from "src/store/auth/getters";
+import UserService from "src/services/user.service";
 
 export default {
   name: "ProfileInfoComponent",
@@ -226,18 +226,44 @@ export default {
       isProfileInfoEditing: false,
       isProfileSecEditing: false,
       isPasswordEditing: false,
+
+      user: {
+          name: 'Имя',
+          surname: 'Фамилия',
+          patronymic: "Отчество",
+          username: "Username1",
+          password: "MyPASSword",
+          oldPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+          email: "email@luga.ru",
+          birthday: '2000-05-19',
+          about: "Все обо мне",
+          status: 'Верни шаверму',
+          photo: "",
+          phoneNumber: "88005553535"
+        }
     }
   },
   computed: {
-    user(){
-      console.log(this.$store.state.auth.user)
-      return this.$store.state.auth.user;
-    },
+    // user(){
+    //   console.log(this.$store.state.auth.user)
+    //   return this.$store.state.auth.user;
+    // },
     editedUser(){
       return this.$store.state.auth.user;
     }
   },
+  mounted() {
+    this.getUserData()
+  },
   methods: {
+    getUserData(){
+      UserService.getUserDate(this.$store.state.auth.user.userId).then(response => {
+        console.log(response)
+        this.user = response.data
+      })
+    },
     submitChangePassword() {
       this.user.password = this.editedUser.confirmPassword
       Notify.create({
