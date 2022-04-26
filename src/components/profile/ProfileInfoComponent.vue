@@ -119,7 +119,7 @@
         >
           <q-input
             filled
-            v-model="editedUser.name"
+            v-model="user.name"
             label="Имя"
             :readonly="!isProfileInfoEditing"
             lazy-rules
@@ -127,7 +127,7 @@
           />
           <q-input
             filled
-            v-model="editedUser.surname"
+            v-model="user.surname"
             label="Фамилия"
             :readonly="!isProfileInfoEditing"
             lazy-rules
@@ -135,7 +135,7 @@
           />
           <q-input
             filled
-            v-model="editedUser.patronymic"
+            v-model="user.patronymic"
             label="Отчество"
             :readonly="!isProfileInfoEditing"
             lazy-rules
@@ -143,7 +143,7 @@
           />
           <q-input
             filled
-            v-model="editedUser.status"
+            v-model="user.status"
             label="Статус"
             :readonly="!isProfileInfoEditing"
             autogrow
@@ -152,7 +152,7 @@
           />
           <q-input
             filled
-            v-model="editedUser.about"
+            v-model="user.about"
             label="Обо мне"
             :readonly="!isProfileInfoEditing"
             autogrow
@@ -162,7 +162,7 @@
           <q-input
             filled
             stack-label
-            v-model="editedUser.birthday"
+            v-model="user.birthday"
             label="День рождения"
             :readonly="!isProfileInfoEditing"
             type="date"
@@ -170,7 +170,7 @@
           <!--todo пофиксить на рефреше некорректное поведение (да что с тобой не так)-->
           <q-input
             filled
-            v-model="editedUser.phoneNumber"
+            v-model="user.phoneNumber"
             label="Номер телефона"
             :readonly="!isProfileInfoEditing"
             mask="+# - (###) - ### - ## - ##"
@@ -188,8 +188,12 @@
             <q-btn :disable="!isProfileInfoEditing" v-if="isProfileInfoEditing" flat color="primary"
                    label="Отменить"
                    no-caps @click="resetChangeUserData"/>
-            <q-btn :disable="!isProfileInfoEditing" v-if="isProfileInfoEditing" flat color="primary" type="submit"
+            <q-btn :disable="!isProfileInfoEditing"
+                   v-if="isProfileInfoEditing"
+                   flat color="primary"
+                   type="submit"
                    label="Сохранить"
+                   @click="saveUserData"
                    no-caps/>
           </div>
         </q-form>
@@ -228,26 +232,27 @@ export default {
       isPasswordEditing: false,
 
       user: {
-          name: 'Имя',
-          surname: 'Фамилия',
-          patronymic: "Отчество",
-          username: "Username1",
-          password: "MyPASSword",
-          oldPassword: "",
-          newPassword: "",
-          confirmPassword: "",
-          email: "email@luga.ru",
-          birthday: '2000-05-19',
-          about: "Все обо мне",
-          status: 'Верни шаверму',
-          photo: "",
-          phoneNumber: "88005553535"
+          name: '',
+          surname: '',
+          patronymic: '',
+          username: '',
+          password: '',
+          oldPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+          email: '',
+          // email: this.$store.state.auth.user.email,
+          birthday: '',
+          about: '',
+          status: '',
+          photo: '',
+          phoneNumber: ''
         }
     }
   },
   computed: {
     // user(){
-    //   console.log(this.$store.state.auth.user)
+    //   // console.log(this.$store.state.auth.user)
     //   return this.$store.state.auth.user;
     // },
     editedUser(){
@@ -259,10 +264,14 @@ export default {
   },
   methods: {
     getUserData(){
-      UserService.getUserDate(this.$store.state.auth.user.userId).then(response => {
-        console.log(response)
+      UserService.getUserData(this.$store.state.auth.user.userId).then(response => {
         this.user = response.data
+        this.editedUser = response.data
       })
+    },
+    saveUserData(){
+      console.log(this.user)
+      UserService.saveUserData(this.user)
     },
     submitChangePassword() {
       this.user.password = this.editedUser.confirmPassword
