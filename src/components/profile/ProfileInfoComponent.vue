@@ -109,6 +109,12 @@
         </div>
       </q-form>
     </q-card>
+    <q-uploader
+      accept="image/*"
+      label="Обновите фото профиля"
+      auto-upload
+      url="http://localhost:8080/api/media/upload/profilePhoto"
+    />
   </div>
   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
     <q-card>
@@ -205,6 +211,7 @@
 <script>
 import {Notify} from "quasar";
 import UserService from "src/services/user.service";
+import {MediaService} from "src/services/media.service";
 
 export default {
   name: "ProfileInfoComponent",
@@ -263,8 +270,16 @@ export default {
     this.getUserData()
   },
   methods: {
+    uploadProfilePhoto(file){
+      return{
+        url: 'http://localhost:8080/api/media/upload/profilePhoto',
+        methods: 'POST',
+
+      }
+      // MediaService.uploadProfilePhoto(file)
+    },
     getUserData(){
-      UserService.getUserData(this.$store.state.auth.user.userId).then(response => {
+      UserService.getUserData(this.$store.state.auth.user.id).then(response => {
         this.user = response.data
         this.editedUser = response.data
       })
